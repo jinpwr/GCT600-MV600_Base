@@ -122,7 +122,9 @@ def socket_server_thread():
                     
                     # Sleep briefly to match typical frame rate
                     time.sleep(0.033) 
-            except (ConnectionResetError, BrokenPipeError):
+            except (ConnectionError, OSError):
+                # ConnectionError also covers ConnectionAbortedError (WinError 10053),
+                # raised on Windows when Unity leaves Play mode.
                 print(f"[Socket] Disconnected from {addr}")
             finally:
                 client_socket.close()
