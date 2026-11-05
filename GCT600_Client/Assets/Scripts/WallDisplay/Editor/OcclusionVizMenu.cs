@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Builds the webcam-to-head occlusion test rig and links it to RemoteAvatar_A / RemoteAvatar_B.
+// Builds the webcam-to-head occlusion test rig and links it to RemoteAvatar_A / RemoteAvatar_B and MixamoAvatar_A.
 public static class OcclusionVizMenu
 {
     // Plane1 (the floor in front of Wall1) sits at y = 0 in AvatarWallDisplay.
@@ -87,6 +87,8 @@ public static class OcclusionVizMenu
         // Avatars are optional: link what exists and report the rest.
         LinkAvatar("RemoteAvatar_A", selectorA, webcamOrigin);
         LinkAvatar("RemoteAvatar_B", selectorB, webcamOrigin);
+        // server_pose.py sends only the first person, so only A gets a webcam-driven Mixamo avatar.
+        LinkHybridAvatar("MixamoAvatar_A", selectorA);
 
         Undo.RegisterCreatedObjectUndo(root, "Create Occlusion Viz");
         Undo.CollapseUndoOperations(undoGroup);
@@ -163,6 +165,34 @@ public static class OcclusionVizMenu
         receiver.displayOrigin = webcamOrigin;
         PrefabUtility.RecordPrefabInstancePropertyModifications(receiver);
         Debug.Log($"[OcclusionViz] Linked '{avatarName}' to {selector.name}; Display Origin = WebcamOrigin.", go);
+    }
+
+    static void LinkHybridAvatar(string avatarName, HeadTargetSelector selector)
+    {
+        GameObject go = GameObject.Find(avatarName);
+        if (go == null)
+        {
+            Debug.LogWarning($"[OcclusionViz] '{avatarName}' not found. {selector.name} keeps mode {selector.mode}.", selector);
+            return;
+        }
+
+        Animator animator = go.GetComponent<Animator>();
+        if (animator == null || !animator.isHuman)
+        {
+            Debug.LogWarning($"[OcclusionViz] '{avatarName}' has no Humanoid Animator. {selector.name} keeps mode {selector.mode}.", go);
+            return;
+        }
+
+        HybridAvatarRoot hybrid = go.GetComponent<HybridAvatarRoot>();
+        if (hybrid == null) hybrid = Undo.AddComponent<HybridAvatarRoot>(go);
+        Undo.RecordObject(hybrid, "Link Hybrid Avatar");
+        hybrid.animator = animator;
+        hybrid.headReceiver = selector.headReceiver;
+        PrefabUtility.RecordPrefabInstancePropertyModifications(hybrid);
+
+        selector.hybridAvatar = hybrid;
+        selector.mode = HeadTargetSelector.Mode.HybridAvatarHead;
+        Debug.Log($"[OcclusionViz] Linked '{avatarName}' to {selector.name}; mode = HybridAvatarHead.", go);
     }
 
     static Transform CreatePrimitive(PrimitiveType type, string name, Transform parent)

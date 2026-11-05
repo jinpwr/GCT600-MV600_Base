@@ -2,16 +2,19 @@ using Oculus.Avatar2;
 using UnityEngine;
 
 // Picks the line's end point. Auto: fresh head channel > streamed avatar Head joint > fallback.
+// HybridAvatarHead: the Mixamo avatar's Head bone (HybridAvatarRoot moves it to the Quest head when fresh) > fallback.
 // Runs after HeadPoseReceiver.Update so IsFresh is current; CameraToHeadLine reads the target in LateUpdate.
 [DefaultExecutionOrder(100)]
 public class HeadTargetSelector : MonoBehaviour
 {
-    public enum Mode { Auto, HeadChannel, AvatarJoint, Fake }
-    private enum Source { None, HeadChannel, AvatarJoint, Fake }
+    // New values go at the end: the mode is serialized as an int.
+    public enum Mode { Auto, HeadChannel, AvatarJoint, Fake, HybridAvatarHead }
+    private enum Source { None, HeadChannel, AvatarJoint, Fake, HybridAvatarHead }
 
     public CameraToHeadLine line;
     public HeadPoseReceiver headReceiver;
     public OvrAvatarEntity avatar;
+    public HybridAvatarRoot hybridAvatar;
     public Transform fallback;
     public Mode mode = Mode.Auto;
 
@@ -48,6 +51,11 @@ public class HeadTargetSelector : MonoBehaviour
                 target = joint;
                 return joint != null ? Source.AvatarJoint : Source.None;
             case Mode.Fake:
+                target = fallback;
+                return fallback != null ? Source.Fake : Source.None;
+            case Mode.HybridAvatarHead:
+                Transform bone = hybridAvatar != null ? hybridAvatar.HeadBone : null;
+                if (bone != null) { target = bone; return Source.HybridAvatarHead; }
                 target = fallback;
                 return fallback != null ? Source.Fake : Source.None;
         }

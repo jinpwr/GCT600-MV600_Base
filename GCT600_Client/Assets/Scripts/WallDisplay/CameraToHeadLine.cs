@@ -1,6 +1,8 @@
 using UnityEngine;
 
 // Draws a line from origin (webcam) to target (head). Reads positions only; never moves the target.
+// Runs after MixamoRetargeter (0) and HybridAvatarRoot (100) in LateUpdate so the end point is this frame's head.
+[DefaultExecutionOrder(200)]
 [RequireComponent(typeof(LineRenderer))]
 public class CameraToHeadLine : MonoBehaviour
 {
