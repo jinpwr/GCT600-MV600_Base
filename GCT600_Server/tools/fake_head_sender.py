@@ -1,7 +1,8 @@
 """Send a fake head pose to avatar_relay.py so HeadPoseReceiver can be tested without a Quest.
 
 Connects as a publisher (same handshake as avatar_relay.py), then sends MAV1 packets:
-"<4sId7f" header (magic, sequence, timestamp, px py pz qx qy qz qw) + 1 byte of filler.
+"<4sId7f" header (magic, sequence, timestamp, px py pz qx qy qz qw) + the "H" marker byte,
+the same 45-byte head packet as HeadPoseSender.
 The head moves on a horizontal circle (radius 0.5 m, height 1.6 m) in the receiver's
 displayOrigin space. Python 3.10+, standard library only.
 """
@@ -15,7 +16,7 @@ import sys
 import time
 
 POSE_HEADER = struct.Struct("<4sId7f")
-FILLER = b"\x00"
+FILLER = b"H"  # HeadPoseSender's marker byte (0x48)
 
 HEIGHT = 1.6          # metres above displayOrigin (WebcamOrigin sits on the floor)
 RADIUS = 0.5
@@ -65,7 +66,7 @@ def make_packet(sequence, timestamp, t):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--channel", default="quest-A-head")
+    parser.add_argument("--channel", default="head-A")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=5060)
     parser.add_argument("--rate", type=float, default=30, help="packets per second")

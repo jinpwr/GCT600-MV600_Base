@@ -81,8 +81,8 @@ public static class OcclusionVizMenu
         bodyA.position = new Vector3(headAPos.x, FloorY + BodyHeight * 0.5f, headAPos.z);
         bodyA.localScale = new Vector3(BodyDiameter, BodyHeight * 0.5f, BodyDiameter);
 
-        HeadTargetSelector selectorA = CreatePerson("A", "quest-A-head", root.transform, webcamOrigin, headAPos, Color.green);
-        HeadTargetSelector selectorB = CreatePerson("B", "quest-B-head", root.transform, webcamOrigin, headBPos, Color.yellow);
+        HeadTargetSelector selectorA = CreatePerson("A", "head-A", root.transform, webcamOrigin, headAPos, Color.green);
+        HeadTargetSelector selectorB = CreatePerson("B", "head-B", root.transform, webcamOrigin, headBPos, Color.yellow);
 
         // Avatars are optional: link what exists and report the rest.
         LinkAvatar("RemoteAvatar_A", selectorA, webcamOrigin);

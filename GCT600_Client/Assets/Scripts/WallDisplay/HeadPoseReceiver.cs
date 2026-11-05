@@ -10,7 +10,7 @@ public sealed class HeadPoseReceiver : MonoBehaviour
     [Header("Relay")]
     public string serverAddress = "127.0.0.1";
     public int serverPort = 5060;
-    public string channel = "quest-A-head";
+    public string channel = "head-A";
 
     [Header("Pose")]
     [Tooltip("Maps the sender's reference space into this scene, same as MetaAvatarReceiver.displayOrigin.")]
