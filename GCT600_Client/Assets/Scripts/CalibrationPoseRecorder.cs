@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -20,14 +21,18 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
 
     [Header("Recording")]
     public float durationSeconds = 10f;
-    [Tooltip("Start once the headset is tracking (immediately in the Editor without a headset).")]
+    [Tooltip("Start once the headset is worn and tracking (immediately in the Editor without a headset).")]
     public bool startAutomatically = true;
+    [Tooltip("Seconds between putting the headset on and the automatic start, to get into the pose.")]
+    public float autoStartDelay = 3f;
     [Tooltip("Controller button that starts a new recording. None disables it.")]
     public OVRInput.Button restartButton = OVRInput.Button.One;
     [Tooltip("Written into the file name and header; TaekwonQuestSlot sets it.")]
     public string slotLabel = "A";
     [Tooltip("Optional; adds the recenter count to every row.")]
     public RecenterWatcher recenterWatcher;
+    [Tooltip("Vibrate both controllers: one pulse when recording starts, two when it is saved.")]
+    public bool hapticFeedback = true;
 
     [Header("Runtime status")]
     [SerializeField] private bool recording;
@@ -40,6 +45,7 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
     private double startTime;
     private DateTime startUtc;
     private bool autoStarted;
+    private float wornSince = -1;
 
     private void Start()
     {
@@ -61,7 +67,12 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
     {
         if (!recording)
         {
-            bool headReady = !XRSettings.isDeviceActive || OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.Head);
+            // The headset tracks while it sits on a desk, so also wait for the proximity sensor.
+            bool worn = !XRSettings.isDeviceActive ||
+                        (OVRPlugin.userPresent && OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.Head));
+            if (!worn) wornSince = -1;
+            else if (wornSince < 0) wornSince = Time.unscaledTime;
+            bool headReady = worn && (!XRSettings.isDeviceActive || Time.unscaledTime - wornSince >= autoStartDelay);
             if (startAutomatically && !autoStarted && headReady)
             {
                 autoStarted = true;
@@ -76,7 +87,11 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
 
         double now = Time.realtimeSinceStartupAsDouble;
         AppendRow(now);
-        if (now - startTime >= durationSeconds) FinishRecording(false);
+        if (now - startTime >= durationSeconds)
+        {
+            FinishRecording(false);
+            Buzz(2);
+        }
     }
 
     public void StartRecording()
@@ -88,6 +103,24 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
         startUtc = DateTime.UtcNow;
         recording = true;
         Debug.Log($"[CalibrationPoseRecorder] Recording registration pose for {durationSeconds:0.#} s.", this);
+        Buzz(1);
+    }
+
+    // The wearer cannot see the Console, so signal start and end through the controllers.
+    private void Buzz(int pulses)
+    {
+        if (hapticFeedback && isActiveAndEnabled) StartCoroutine(BuzzRoutine(pulses));
+    }
+
+    private static IEnumerator BuzzRoutine(int pulses)
+    {
+        for (int i = 0; i < pulses; i++)
+        {
+            OVRInput.SetControllerVibration(1f, 0.8f, OVRInput.Controller.Touch);
+            yield return new WaitForSecondsRealtime(0.25f);
+            OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.Touch);
+            yield return new WaitForSecondsRealtime(0.15f);
+        }
     }
 
     private void AppendRow(double questTime)

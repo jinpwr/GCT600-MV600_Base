@@ -65,8 +65,12 @@ public sealed class HeadPoseSender : MonoBehaviour
     {
         connectionStatus = connection?.Status ?? "Stopped";
         if (connection == null || !connection.Connected) return;
-        if (Time.unscaledTime < nextSend) return;
-        nextSend = Time.unscaledTime + 1f / Mathf.Clamp(sendRate, 1, 60);
+        float now = Time.unscaledTime;
+        if (now < nextSend) return;
+        // Step from the previous target, not from now, so frame quantization does not lower the rate
+        // (now + 1/30 at 72 fps sends every 3rd frame = 24 Hz). Resync after a stall.
+        float interval = 1f / Mathf.Clamp(sendRate, 1, 60);
+        nextSend = now - nextSend > interval ? now + interval : nextSend + interval;
         try
         {
             Vector3 position = centerEyeAnchor.position;

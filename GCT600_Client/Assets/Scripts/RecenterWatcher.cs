@@ -11,6 +11,10 @@ public sealed class RecenterWatcher : MonoBehaviour
     [Tooltip("Set OVRManager's tracking origin to Stage (fixed to the boundary) on start. " +
              "Changes the coordinate origin for every sender, so agree on it before calibration.")]
     public bool useStageOrigin = false;
+    [Tooltip("Also count Unity XR trackingOriginUpdated events. Off by default: OpenXR also raises it when the " +
+             "session first sets up its origin (e.g. putting the headset on), which looks like a recenter. " +
+             "The Quest's own recenter counter (OVRDisplay.RecenteredPose) is always used.")]
+    public bool countUnityXREvents = false;
 
     [Header("Warning")]
     [Tooltip("Optional object (e.g. a red text panel in front of the camera) shown after a recenter.")]
@@ -58,7 +62,10 @@ public sealed class RecenterWatcher : MonoBehaviour
     }
 
     // Unity XR raises this alongside OVR's event for the same recenter; both only add to the count.
-    private void OnTrackingOriginUpdated(XRInputSubsystem subsystem) => OnRecentered();
+    private void OnTrackingOriginUpdated(XRInputSubsystem subsystem)
+    {
+        if (countUnityXREvents) OnRecentered();
+    }
 
     private void OnRecentered()
     {

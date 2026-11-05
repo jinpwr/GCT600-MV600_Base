@@ -2178,7 +2178,7 @@ MonoBehaviour:
       reserved: 0000000000000000000000000000000000000000000000000000000000000000
       subMeshVertexPreference: 0
   _validateCache: 1
-  _activeView: 2
+  _activeView: 1
   _activeManifestation: 2
   _activeSubMeshes: -1
   _activeSubMeshesIncludeUntyped: 1
@@ -2349,6 +2349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TaekwonQuestSlot
   slot: 0
+  serverAddress: 127.0.0.1
   avatarChannelA: avatar-A
   avatarChannelB: avatar-B
   headChannelA: head-A
