@@ -21,8 +21,8 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
 
     [Header("Recording")]
     public float durationSeconds = 10f;
-    [Tooltip("Start once the headset is worn and tracking (immediately in the Editor without a headset).")]
-    public bool startAutomatically = true;
+    [Tooltip("Start once the headset is worn and head + both hands are tracked (immediately in the Editor without a headset).")]
+    public bool autoStart = false; // Off: record only when the restart button (A) is pressed.
     [Tooltip("Seconds between putting the headset on and the automatic start, to get into the pose.")]
     public float autoStartDelay = 3f;
     [Tooltip("Controller button that starts a new recording. None disables it.")]
@@ -67,13 +67,19 @@ public sealed class CalibrationPoseRecorder : MonoBehaviour
     {
         if (!recording)
         {
-            // The headset tracks while it sits on a desk, so also wait for the proximity sensor.
-            bool worn = !XRSettings.isDeviceActive ||
-                        (OVRPlugin.userPresent && OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.Head));
-            if (!worn) wornSince = -1;
+            // Editor without a headset: start at once. On a device XR is not active for the first
+            // frames, so never treat that as "no headset" there.
+            bool editorPreview = Application.isEditor && !XRSettings.isDeviceActive;
+            // The headset tracks while it sits on a desk, so also wait for the proximity sensor, and
+            // for both controllers/hands (asleep controllers are untracked and cannot vibrate).
+            bool ready = editorPreview ||
+                         (OVRPlugin.userPresent && OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.Head) &&
+                          OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.HandLeft) &&
+                          OVRPlugin.GetNodePositionTracked(OVRPlugin.Node.HandRight));
+            if (!ready) wornSince = -1;
             else if (wornSince < 0) wornSince = Time.unscaledTime;
-            bool headReady = worn && (!XRSettings.isDeviceActive || Time.unscaledTime - wornSince >= autoStartDelay);
-            if (startAutomatically && !autoStarted && headReady)
+            bool headReady = ready && (editorPreview || Time.unscaledTime - wornSince >= autoStartDelay);
+            if (autoStart && !autoStarted && headReady)
             {
                 autoStarted = true;
                 StartRecording();

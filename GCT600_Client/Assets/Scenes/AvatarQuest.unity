@@ -2373,6 +2373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecenterWatcher
   useStageOrigin: 0
+  countUnityXREvents: 0
   warningObject: {fileID: 0}
   warningSeconds: 5
   recenterCount: 0
@@ -2396,9 +2397,11 @@ MonoBehaviour:
   referenceSpace: {fileID: 0}
   durationSeconds: 10
   startAutomatically: 1
+  autoStartDelay: 3
   restartButton: 1
   slotLabel: A
   recenterWatcher: {fileID: 1073124562}
+  hapticFeedback: 1
   recording: 0
   rowsRecorded: 0
   lastFilePath: 
