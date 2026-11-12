@@ -232,6 +232,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60969003}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &169829352 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+  m_PrefabInstance: {fileID: 713064091}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &169829355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169829352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8e082edd6aba524a86ee2f98af277a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestBodyIK
+  eyeAnchor: {fileID: 821967499}
+  leftHandAnchor: {fileID: 2122866720}
+  rightHandAnchor: {fileID: 317235014}
+  trackingSpace: {fileID: 1008878401}
+  restEyeHeight: 1.622
+  eyeForward: 0.09
+  hideInFirstPerson:
+  - {fileID: 1550623812}
+  metaAvatar: {fileID: 1036083246}
+  bodyTurnSpeed: 5
+  maxCrouch: 0.7
+  leftHandOffset: {x: 0, y: 0, z: -0.06}
+  rightHandOffset: {x: 0, y: 0, z: -0.06}
+  neckShare: 0.35
+  driveWithoutHeadset: 0
 --- !u!1001 &201776000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1759,6 +1791,78 @@ Transform:
   - {fileID: 1366580719}
   m_Father: {fileID: 317235014}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &713064091
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_Name
+      value: TaekwondoBoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0c3c05a5226821e46beb2cf9265cb19e, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 169829355}
+  m_SourcePrefab: {fileID: 100100000, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
 --- !u!1 &796580584
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,6 +2660,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &1550623812 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2236237030686087061, guid: 0ad80c363cb34fa4ab2d0070ab429f1e, type: 3}
+  m_PrefabInstance: {fileID: 713064091}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1627405275
 GameObject:
   m_ObjectHideFlags: 0
@@ -2771,6 +2880,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallFacingHeadsetSimulator
   yawOffset: 180
+--- !u!1001 &1928677437
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9333013
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.35909423
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
+      propertyPath: m_Name
+      value: TaekwondoGirl
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4673b0b7e72de27459835658d631b9d8, type: 3}
 --- !u!1 &2122866719
 GameObject:
   m_ObjectHideFlags: 0
@@ -2990,3 +3156,5 @@ SceneRoots:
   - {fileID: 609401963}
   - {fileID: 1073124565}
   - {fileID: 3325458566728933899}
+  - {fileID: 1928677437}
+  - {fileID: 713064091}
