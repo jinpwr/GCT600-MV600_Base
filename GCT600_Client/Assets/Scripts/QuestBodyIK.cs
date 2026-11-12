@@ -5,7 +5,8 @@ using UnityEngine.XR;
 // First-person body for the local Quest player: drives a Humanoid character from the Meta XR camera rig.
 // The headset places and turns the head (the eye camera stays where the headset puts it and the character
 // is moved so its eyes sit on it), the hand anchors drive the hands through Humanoid IK, and the feet stay
-// on the floor, so the knees bend when the player crouches.
+// on the floor, so the knees bend when the player crouches. With a WebcamLegs component receiving fresh
+// webcam data, the legs and body height come from the webcam instead.
 // Needs an Animator Controller with IK Pass on. With no headset active (Editor without Link) the character
 // stands under the rig in its default pose and nothing is hidden.
 [RequireComponent(typeof(Animator))]
@@ -29,6 +30,8 @@ public sealed class QuestBodyIK : MonoBehaviour
     public Renderer[] hideInFirstPerson;
     [Tooltip("The local Meta Avatar. Its own body is hidden while a headset is active; it keeps tracking and streaming.")]
     public OvrAvatarEntity metaAvatar;
+    [Tooltip("Optional. While it has fresh webcam data, it drives the legs and body height instead of the planted feet.")]
+    public WebcamLegs webcamLegs;
 
     [Header("Tuning")]
     [Tooltip("How quickly the body turns to follow the head.")]
@@ -102,6 +105,9 @@ public sealed class QuestBodyIK : MonoBehaviour
 
         // Stand on the floor; sink (and let foot IK bend the knees) when the eyes drop below standing height.
         float sink = Mathf.Clamp(eyeAnchor.position.y - FloorY - restEyeHeight, -maxCrouch, 0f);
+        // With webcam legs, the height that keeps the lower foot on the floor takes over.
+        float legs = LegsWeight;
+        if (legs > 0f) sink = Mathf.Lerp(sink, Mathf.Clamp(webcamLegs.RootHeight, -maxCrouch, 0.5f), legs);
         Vector3 p = transform.position;
         p.y = FloorY + sink;
         transform.position = p;
@@ -112,9 +118,12 @@ public sealed class QuestBodyIK : MonoBehaviour
         float w = driving ? 1f : 0f;
         SetHand(AvatarIKGoal.LeftHand, AvatarIKHint.LeftElbow, leftHandAnchor, leftHandOffset, -1f, w);
         SetHand(AvatarIKGoal.RightHand, AvatarIKHint.RightElbow, rightHandAnchor, rightHandOffset, 1f, w);
-        PlantFoot(AvatarIKGoal.LeftFoot, AvatarIKHint.LeftKnee, leftFootLocal, w);
-        PlantFoot(AvatarIKGoal.RightFoot, AvatarIKHint.RightKnee, rightFootLocal, w);
+        float feet = w * (1f - LegsWeight); // the webcam legs replace the planted feet
+        PlantFoot(AvatarIKGoal.LeftFoot, AvatarIKHint.LeftKnee, leftFootLocal, feet);
+        PlantFoot(AvatarIKGoal.RightFoot, AvatarIKHint.RightKnee, rightFootLocal, feet);
     }
+
+    private float LegsWeight => webcamLegs != null && webcamLegs.isActiveAndEnabled ? webcamLegs.Weight : 0f;
 
     private void SetHand(AvatarIKGoal goal, AvatarIKHint hint, Transform anchor, Vector3 offset, float side, float w)
     {
