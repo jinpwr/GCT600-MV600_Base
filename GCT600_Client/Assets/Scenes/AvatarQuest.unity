@@ -253,17 +253,21 @@ MonoBehaviour:
   leftHandAnchor: {fileID: 2122866720}
   rightHandAnchor: {fileID: 317235014}
   trackingSpace: {fileID: 1008878401}
+  leftHandSkeleton: {fileID: 1627405281}
+  rightHandSkeleton: {fileID: 582230962}
   restEyeHeight: 1.622
   eyeForward: 0.09
   hideInFirstPerson:
   - {fileID: 1550623812}
   metaAvatar: {fileID: 1036083246}
+  hideMetaHandMeshes: 1
   webcamLegs: {fileID: 169829356}
   bodyTurnSpeed: 5
   maxCrouch: 0.7
   leftHandOffset: {x: 0, y: 0, z: -0.06}
   rightHandOffset: {x: 0, y: 0, z: -0.06}
   neckShare: 0.35
+  maxArmStretch: 0.25
   driveWithoutHeadset: 0
 --- !u!114 &169829356
 MonoBehaviour:
@@ -1461,7 +1465,7 @@ MonoBehaviour:
   AllowRecenter: 1
   LateControllerUpdate: 1
   LateLatching: 0
-  controllerDrivenHandPosesType: 0
+  controllerDrivenHandPosesType: 2
   SimultaneousHandsAndControllersEnabled: 0
   _readOnlyWideMotionModeHandPosesEnabled: 0
   wideMotionModeHandPosesEnabled: 0
